@@ -21,7 +21,7 @@ def georeference (x, y, z, inputFile, outputFile):
 
     translator_exec = "gdal_translate"
     proc = subprocess.run(
-        [translator_exec, "-of", "GTiff", "-a_ullr", ul_longitude, ul_latitude, lr_longitude, lr_latitude, "-a_srs", "EPSG:4326", inputFile, outputFile],
+        [translator_exec, "-of", "GTiff", "-co", "compress=lzw", "-co", "predictor=2", "-a_ullr", str(ul_longitude), str(ul_latitude), str(lr_longitude), str(lr_latitude), "-a_srs", "EPSG:4326", inputFile, outputFile],
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE
         )
