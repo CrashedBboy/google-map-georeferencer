@@ -1,3 +1,3 @@
-from main import georeference
+from referencer import main
 
-georeference (0, 0, 0, "./data/test.jpg", "./data/test.tiff")
+main.georeference (0, 0, 0, "./data/test.jpg", "./data/test.tiff")
