@@ -1,4 +1,5 @@
 import subprocess
+import math
 
 # Google uses EPSG:3857
 MIN_LAT = -85.06
@@ -6,18 +7,22 @@ MAX_LAT = 85.06
 MIN_LON = -180
 MAX_LON = 180
 
+def num2deg(x, y, level):
+
+  n = 2 ** level
+
+  lon_deg = x / n * 360.0 - 180.0
+
+  lat_rad = math.atan(math.sinh(math.pi * (1 - 2 * y / n)))
+  lat_deg = math.degrees(lat_rad)
+
+  return (lat_deg, lon_deg)
+
 def georeference (x, y, z, inputFile, outputFile):
 
-    tiles_num = 2**z
+    ul_latitude, ul_longitude = num2deg(x, y, z)
 
-    lat_interval = (MAX_LAT - MIN_LAT) / tiles_num
-    lon_interval = (MAX_LON - MIN_LON) / tiles_num
-
-    ul_latitude = MAX_LAT - y * lat_interval
-    ul_longitude = MIN_LON + x * lon_interval
-
-    lr_latitude = ul_latitude - lat_interval
-    lr_longitude = ul_longitude + lon_interval
+    lr_latitude, lr_longitude = num2deg(x+1, y+1, z)
 
     translator_exec = "gdal_translate"
     proc = subprocess.run(
