@@ -8,12 +8,20 @@ target_directory = "./data/target"
 start_level = 0
 end_level = 3
 
+# reverse folder number (larger number = finer or larger number = more rough)
+reverse_order = True
+
 if not os.path.isdir(target_directory):
     os.makedirs(target_directory)
 
 for level in range(start_level, end_level+1):
+
+    target_level = str(level - start_level)
+
+    if (reverse_order):
+        target_level = str(end_level - level)
     
-    target_level_dir = target_directory + "/" + str(level)
+    target_level_dir = target_directory + "/" + target_level
     source_level_dir = source_directory + "/" + str(level)
 
     if not os.path.isdir(target_level_dir):
