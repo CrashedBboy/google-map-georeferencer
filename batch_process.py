@@ -2,11 +2,11 @@ from referencer import main
 
 import os
 
-source_directory = "./data/source"
-target_directory = "./data/target"
+source_directory = "/home/vagrant/shared/source-tiles/google-map-east-kalimantan"
+target_directory = "/home/vagrant/shared/geoserver_data/data/world/google-map-east-kalimantan"
 
 start_level = 0
-end_level = 3
+end_level = 15
 
 # reverse folder number (larger number = finer or larger number = more rough)
 reverse_order = True
@@ -27,13 +27,19 @@ for level in range(start_level, end_level+1):
     if not os.path.isdir(target_level_dir):
         os.makedirs(target_level_dir)
 
-    max = 2**level
+    fileList = os.listdir(source_level_dir)
 
-    for x in range(0, max):
-        for y in range(0, max):
+    fileNumber = len(fileList)
 
-            source_file = source_level_dir + "/" + str(x) + "_" + str(y) + ".jpg"
+    for i, f in enumerate(fileList, start=1):
 
-            if (os.path.isfile(source_file)):
-                print("process " + str(x) + ", " + str(y) + ", " + str(level))
-                main.georeference (x, y, level, source_file, target_level_dir + "/" + str(x) + "_" + str(y) + ".tiff")
+        slices = f.split(".")[0].split("_")
+
+        x = slices[0]
+        y = slices[1]
+
+        source_file = source_level_dir + "/" + f
+
+        if (os.path.isfile(source_file)):
+            print("process " + x + ", " + y + ", " + str(level) + " ==> " + str(i) + "/" + str(fileNumber))
+            main.georeference (int(x), int(y), level, source_file, target_level_dir + "/" + x + "_" + y + ".tiff")
